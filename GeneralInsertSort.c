@@ -54,14 +54,37 @@ void GenInsertSort(void *base, size_t num, size_t size,
    int i, j;
    char *vals = base, toInsert[size];
 
-   for (i = 1; i < num; i++) {
-      memmove(toInsert, vals + i*size, size);
-      for (j = i - 1; j >= 0 && compar(toInsert, vals + j*size); j--)
-         memmove(vals + (j + 1)*size, vals + j*size, size);
+   for (i = size; i < num*size; i += size) {
+      memmove(toInsert, vals + i, size);
 
-      memmove(vals + (j + 1)*size, toInsert, size);
+      for (j = i - size; j >= 0 && compar(toInsert, vals + j); j -= size) 
+         memmove(vals + j + size, vals + j, size);
+
+      memmove(vals + j + size, toInsert, size);
    }
 }
+
+/*
+void GenInsertSort(void *base, size_t num, size_t size,
+ int (*compar)(const void*, const void*)) {
+   char *vals = base, toInsert[size];
+   char *next = vals + size, *loc, *pLoc, *valsEnd = vals + num*size;
+
+   while (next != valsEnd) {
+      loc = next;
+      pLoc = next - size;
+      memmove(toInsert, loc, size);
+
+      next += size;
+      while (loc != vals && compar(toInsert, pLoc)) { 
+         memmove(loc, pLoc, size);
+         loc -= size;
+         pLoc -= size;
+      }
+      memmove(loc, toInsert, size);
+   }
+}
+*/
 
 void main() {
    Name names[DIM1] = {{"John", "Smith"}, {"Jane", "Smith"}, {"Bill", "Jones"},
