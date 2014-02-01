@@ -28,24 +28,12 @@ int NameLess(const void *a, const void *b) {
    Name *nameA = (Name *)a, *nameB = (Name *)b;
    int lastNameComp = strcmp(nameA->last, nameB->last), rtn;
 
-   if (!lastNameComp) 
-      rtn = strcmp(nameA->first, nameB->first) < 0 ? 1 : 0;
-   else 
-      rtn = lastNameComp < 0 ? 1 : 0;
-
-   return rtn;
+   return !lastNameComp ? strcmp(nameA->first, nameB->first) < 0 ? 1:0 : 
+    lastNameComp < 0 ? 1:0;
 }
 
 int NameGreater(const void *a, const void *b) {
-   Name *nameA = (Name *)a, *nameB = (Name *)b;
-   int lastNameComp = strcmp(nameA->last, nameB->last), rtn;
-
-   if (!lastNameComp) 
-      rtn = strcmp(nameA->first, nameB->first) > 0 ? 1 : 0;
-   else 
-      rtn = lastNameComp > 0 ? 1 : 0;
-
-   return rtn;
+   return !NameLess(a, b);
 }
 
 // Function GenInsertSort
